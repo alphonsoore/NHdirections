@@ -167,7 +167,7 @@ var script = document.createElement('script');
 
 			script.src = 'https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js'
 
-			script.onload = function generateMaze() {
+		function generateMaze() {
 				const seed = document.getElementById('seedInput').value;
 				const rng = new Math.seedrandom(seed);
 				const rows = 20;
