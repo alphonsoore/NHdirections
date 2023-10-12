@@ -24,7 +24,7 @@
 				position: absolute;
 				top: 0;
 				left: 0;
-				background-color: rgba(255, 0, 0, 0.5);
+
 				padding: 10px;
 				font-family: Arial, sans-serif;
 				color: white;
@@ -35,25 +35,13 @@
 				bottom: 0;
 				width: 100%;
 				height: 10%;
-				background-color: rgba(128, 128, 128, 0.7);
+
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
 				padding: 10px;
 				box-sizing: border-box;
 				touch-action: manipulation;
-			}
-
-			#placestogo {
-				position: fixed;
-				top: 20px; /* Adjust as needed for the desired vertical spacing */
-				right: 20px; /* Adjust as needed for the desired horizontal spacing */
-				background: maroon;
-				border-radius: 10px;
-				display: none;
-				flex-direction: column; /* Display children in a column */
-				justify-content: center;
-				align-items: center;
 			}
 
 			#image-container {
@@ -121,9 +109,18 @@
 			.hidden {
 				display: none;
 			}
-			
-			.Refresher {
-			
+
+			#scene-container {
+				position: absolute;
+				bottom: 5%;
+				left: 5%;
+				top: 5%;
+				width: 80%;
+				height: 80%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				border: 2px solid black;
 			}
 		
 		
@@ -137,27 +134,12 @@
 
 <body>
 
-		<!-- <div id="overlay"></div> !-->
-
-		<div id="placestogo">
-		<div id="image-container">
-		<img id="image" src="./assets/placestogo/start.jpg" alt="Image">
-		</div>
-		<div id="timer">00:00</div>
-		</div>
-
 		<div id="overlay-controls">
-			<div id="left-right-buttons" class="control-group">
-				<div id="left-button" class="control-button">
-					<img src="./assets/left.png" class="button-image" alt="Left Button">
-				</div>
-				<div id="right-button" class="control-button">
-					<img src="./assets/right.png" class="button-image" alt="Right Button">
-				</div>
-			</div>
+
 			<button id="fullscreen-button" onclick="toggleFullscreen()">
 				<img src="./assets/fullscreen.png" class="button-image" alt="Right Button">
 			</button>
+
 			<div id="center-buttons" class="control-group">
 				<table>
 					<tr>
@@ -171,25 +153,17 @@
 						</td>
 					</tr>
 				</table>
-				<!--	<button onclick="refreshPage()">Refresh</button> !-->
 			</div>
+
 			<div onclick="location.reload();" id="Refresher" class="control-button">
 				<img src="./assets/refresh.png" class="button-image" alt="Refresh">
 			</div>
-			<div id="up-down-buttons" class="control-group">
-				<div id="down-button" class="control-button">
-					<img src="./assets/down.png" class="button-image" alt="Down Button">
-				</div>
-				<div id="stop-button" class="control-button">
-					<img src="./assets/stop.png" class="button-image" alt="STOP">
-				</div>
-				<div id="up-button" class="control-button">
-					<img src="./assets/up.png" class="button-image" alt="Up Button">
-				</div>
-			</div>
+
 		</div>
 
     <input type="hidden" id="mazeResult"></div>
+
+	<!-- <div id="scene-container"></div> -->
 
     <script>
 
@@ -197,60 +171,14 @@
 			location.reload(); // Reloads the current page
 		}
 
-			document.getElementById('seedButton').addEventListener('click', function() {
-				this.classList.add('hidden'); // Adds the 'hidden' class
-				document.getElementById('seedInput').classList.add('hidden');
-			});
+		document.getElementById('seedButton').addEventListener('click', function() {
+			this.classList.add('hidden'); // Adds the 'hidden' class
+			document.getElementById('seedInput').classList.add('hidden');
+		}
+		);
 
 		document.getElementById('Refresher').addEventListener('click', (e) => { e.preventDefault(); location.reload(); });
 
-
-
-
-    const images = Array.from({ length: 10 }, (_, i) => `./assets/placestogo/${i + 10}.jpg`);
-    let currentIndex = 0;
-    const placestogo = document.getElementById('placestogo');
-    const image = document.getElementById('image');
-    const timer = document.getElementById('timer');
-    let timerInterval;
-
-    function startTimer() {
-      let seconds = 0;
-      let minutes = 0;
-
-      timerInterval = setInterval(function() {
-        seconds++;
-        if (seconds === 60) {
-          seconds = 0;
-          minutes++;
-        }
-        const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        timer.textContent = formattedTime;
-      }, 1000);
-    }
-
-    function stopTimer() {
-      clearInterval(timerInterval);
-    }
-
-    function showRandomImage() {
-      if (currentIndex >= images.length) {
-        image.src = './assets/placestogo/finish.gif';
-        currentIndex = images.length; // Prevent further clicks
-        stopTimer();
-      } else {
-        const randomIndex = Math.floor(Math.random() * (images.length - currentIndex)) + currentIndex;
-        image.src = images[randomIndex];
-        images[randomIndex] = images[currentIndex];
-        currentIndex++;
-        if (currentIndex === 1) {
-          startTimer();
-        }
-      }
-    }
-
-    placestogo.addEventListener('click', showRandomImage);
-    placestogo.style.display = 'flex';
 
 		function megaMaze(callback) {
 
@@ -266,7 +194,7 @@
 
 				// Helper function to check if a cell is within bounds
 				function isValid(row, col) {
-				return row >= 0 && row < rows && col >= 0 && col < cols;
+					return row >= 0 && row < rows && col >= 0 && col < cols;
 				}
 
 				// Function to generate the maze using a seed-based approach
@@ -293,7 +221,7 @@
 					];
 
 						// Shuffle the directions array based on the seed
-						for (let i = directions.length - 1; i > 0; i--) {
+					for (let i = directions.length - 1; i > 0; i--) {
 						const j = Math.floor((seedNumber + i) % (i + 1));
 						[directions[i], directions[j]] = [directions[j], directions[i]];
 					}
@@ -324,6 +252,7 @@
 
 				// Store the generated maze in MazeMatrix
 				MazeMatrix = maze;
+
 			}
 
 			// Function to change single 0s between two 1s to 1s in rows
@@ -450,59 +379,58 @@
 			}
 
 			// Function to add extra passages between cells
-				function addExtraPassages() {
-					const rows = MazeMatrix.length;
-					const cols = MazeMatrix[0].length;
-					const seedInput = document.getElementById('seedInput').value;
-					const rng = new Math.seedrandom(seedInput);
+			function addExtraPassages() {
+				const rows = MazeMatrix.length;
+				const cols = MazeMatrix[0].length;
+				const seedInput = document.getElementById('seedInput').value;
+				const rng = new Math.seedrandom(seedInput);
 
-					// Function to check if a cell is a valid passage (equal to 1)
-						function isValidPassage(row, col) {
-							return row >= 0 && row < rows && col >= 0 && col < cols && MazeMatrix[row][col] === 1;
+				// Function to check if a cell is a valid passage (equal to 1)
+					function isValidPassage(row, col) {
+						return row >= 0 && row < rows && col >= 0 && col < cols && MazeMatrix[row][col] === 1;
+					}
+
+				// Function to find a valid neighboring cell for a given cell
+					function findValidNeighbor(row, col) {
+						const neighbors = [
+							[row - 4, col], // Up
+							[row + 4, col], // Down
+							[row, col - 4], // Left
+							[row, col + 4], // Right
+						];
+
+					// Shuffle the neighbors array based on the seed
+						for (let i = neighbors.length - 1; i > 0; i--) {
+							const j = Math.floor(rng() * (0 * (i + 1)));
+							[neighbors[i], neighbors[j]] = [neighbors[j], neighbors[i]];
 						}
 
-					// Function to find a valid neighboring cell for a given cell
-						function findValidNeighbor(row, col) {
-							const neighbors = [
-								[row - 4, col], // Up
-								[row + 4, col], // Down
-								[row, col - 4], // Left
-								[row, col + 4], // Right
-							];
-
-						// Shuffle the neighbors array based on the seed
-							for (let i = neighbors.length - 1; i > 0; i--) {
-								const j = Math.floor(rng() * (0 * (i + 1)));
-								[neighbors[i], neighbors[j]] = [neighbors[j], neighbors[i]];
+					// Find the first valid neighbor
+						for (const [r, c] of neighbors) {
+							if (isValidPassage(r, c)) {
+								return [r, c];
 							}
-
-						// Find the first valid neighbor
-							for (const [r, c] of neighbors) {
-								if (isValidPassage(r, c)) {
-									return [r, c];
-								}
-							}
-							return null; // No valid neighbor found
 						}
+						return null; // No valid neighbor found
+					}
 
-				// Iterate through the maze and add passages that connect to other passages
-					for (let r = 1; r < rows - 1; r += 2) {
-						for (let c = 1; c < cols - 1; c += 2) {
-							if (MazeMatrix[r][c] === 1) {
+			// Iterate through the maze and add passages that connect to other passages
+				for (let r = 1; r < rows - 1; r += 2) {
+					for (let c = 1; c < cols - 1; c += 2) {
+						if (MazeMatrix[r][c] === 1) {
 
-								// Find a valid neighboring cell
-								const neighbor = findValidNeighbor(r, c);
-								if (neighbor) {
+							// Find a valid neighboring cell
+							const neighbor = findValidNeighbor(r, c);
+							if (neighbor) {
 
-								// Create a passage between the current cell and the neighbor
-									const [nr, nc] = neighbor;
+							// Create a passage between the current cell and the neighbor
+								const [nr, nc] = neighbor;
 
-								// Change values between the two 1s to 1 (0, 2, 3, 4, 5, 6, 7, 8, 9 become 1)
-									for (let i = Math.min(r, nr); i <= Math.max(r, nr); i++) {
-										for (let j = Math.min(c, nc); j <= Math.max(c, nc); j++) {
-											if (MazeMatrix[i][j] <= 9) {
-												MazeMatrix[i][j] = 1;
-											}
+							// Change values between the two 1s to 1 (0, 2, 3, 4, 5, 6, 7, 8, 9 become 1)
+								for (let i = Math.min(r, nr); i <= Math.max(r, nr); i++) {
+									for (let j = Math.min(c, nc); j <= Math.max(c, nc); j++) {
+										if (MazeMatrix[i][j] <= 9) {
+											MazeMatrix[i][j] = 1;
 										}
 									}
 								}
@@ -510,6 +438,7 @@
 						}
 					}
 				}
+			}
 
 			// Function to generate the maze and process rows and columns
 			function generateAndProcessMaze() {
@@ -555,38 +484,39 @@
 
 		// Function to toggle fullscreen and re-render the scene
 		function toggleFullscreen() {
+
 			const doc = window.document;
 			const docEl = doc.documentElement;
 
 			if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
 				if (docEl.requestFullscreen) {
 					docEl.requestFullscreen();
-					} else if (docEl.msRequestFullscreen) {
+				} else if (docEl.msRequestFullscreen) {
 					docEl.msRequestFullscreen();
-					} else if (docEl.mozRequestFullScreen) {
+				} else if (docEl.mozRequestFullScreen) {
 					docEl.mozRequestFullScreen();
-					} else if (docEl.webkitRequestFullscreen) {
+				} else if (docEl.webkitRequestFullscreen) {
 					docEl.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-					}
-				} else {
-					if (doc.exitFullscreen) {
+				}
+			} else {
+				if (doc.exitFullscreen) {
 					doc.exitFullscreen();
-					} else if (doc.msExitFullscreen) {
+				} else if (doc.msExitFullscreen) {
 					doc.msExitFullscreen();
-					} else if (doc.mozCancelFullScreen) {
+				} else if (doc.mozCancelFullScreen) {
 					doc.mozCancelFullScreen();
-					} else if (doc.webkitExitFullscreen) {
+				} else if (doc.webkitExitFullscreen) {
 					doc.webkitExitFullscreen();
-					}
 				}
 			}
+		}
 
 		function startGame() {
 
 			// Basic Setup
 			const scene = new THREE.Scene();
-			const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 1000);
 			const renderer = new THREE.WebGLRenderer();
+			renderer.shadowMap.enabled = true; 
 			renderer.setSize(window.outerWidth, window.outerHeight);
 			document.body.appendChild(renderer.domElement);
 
@@ -678,7 +608,7 @@
 
 			// Urban Settings
 			const planeSize = 20; // Size of each plane representing roads
-			const buildingHeights = [10.0, 17.0, 19.0, 20.0, 21.0, 22.0, 23.0, 25.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0];
+			const buildingHeights = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0];
 			const roadColor = 0x888888; // Gray color
 			const buildingColors = [0x222222, 0x333333, 0x444444, 0x555555, 0x666666, 0x777777, 0x888888, 0x999999]; // Colors for buildings
 
@@ -737,7 +667,6 @@
 					// Special buildings
 					} else if (binaryMatrix[i][j] >= 10 && binaryMatrix[i][j] <= 20) {
 						// Create buildings (rectangular prisms)
-						const randomBldgDim = 0.65 + Math.random() * 0.2; // Building size randomizer
 						const integerValue = Math.floor(binaryMatrix[i][j] - 10); // Normalize integer value
 						const decimalValue = Math.round((binaryMatrix[i][j] - Math.floor(binaryMatrix[i][j])) * 10);
 
@@ -745,12 +674,9 @@
 						decimalValuesArray.push(decimalValue); 
 						console.log("decimalValuesArray: ", decimalValuesArray);
 
-						const geometry = new THREE.BoxGeometry(planeSize * randomBldgDim, planeSize * randomBldgDim, 9);
+						const geometry = new THREE.BoxGeometry(planeSize * 1.2, planeSize * 1.2, 2.0);
 
-						const hue = Math.random();
-						const saturation = 0.05 + Math.random() * 0.03;
-						const lightness = 0.5 + Math.random() * 0.1; // Adjust lightness for muted colors
-						const color = new THREE.Color().setHSL(hue, saturation, lightness);
+						const color = new THREE.Color(0x0000FF);
 
 						const materialArray = [];
 
@@ -769,15 +695,15 @@
 						];
 
 						for (let i = 0; i < 6; i++) {
-							if (i === 2) {
-    // Use a different texture for the special face
-    const texture = new THREE.TextureLoader().load(textures[integerValue]);
-    
-    // Enable mipmapping and set minFilter for the texture
-    texture.minFilter = THREE.LinearMipmapLinearFilter;
-    texture.generateMipmaps = true;
+							if (i === 4) {
+								// Use a different texture for the special face
+								const texture = new THREE.TextureLoader().load(textures[integerValue]);
 
-    materialArray.push(new THREE.MeshBasicMaterial({ map: texture }));
+								// Enable mipmapping and set minFilter for the texture
+								texture.minFilter = THREE.LinearMipmapLinearFilter;
+								texture.generateMipmaps = true;
+
+								materialArray.push(new THREE.MeshBasicMaterial({ map: texture }));
 							} else {
 								materialArray.push(new THREE.MeshPhongMaterial({ color }));
 							}
@@ -814,258 +740,52 @@
 				}
 			}
 
-			const loaderGLTF = new THREE.GLTFLoader();
+			// Lights
+			const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+			scene.add(ambientLight);
+			const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+			directionalLight.position.set(200, 200, 1000);
 
-			// Load the GLB model
-			loaderGLTF.load('./assets/car.glb', (gltf) => {
-						const model = gltf.scene;
-						// Set the position of the model
-						model.position.set(0, 0, 0);
-						model.scale.set(2, 2, 2);
-						model.castShadow = true;
+			scene.add(directionalLight);
 
-						model.traverse((child) => {
-								if (child.isMesh) {
-									child.castShadow = true; // Enable shadow casting for all mesh parts
-									child.receiveShadow = true; // Enable shadow receiving for all mesh parts
-								}
-							}
-						);
+			// Set camera rotation for tilting (angle in radians)
+			const tiltAngle = Math.PI / 4; // 30 degrees in radians
 
-					scene.add(model);
+//			const container = document.getElementById('scene-container');
+//			renderer.setPixelRatio(window.devicePixelRatio);
+//			renderer.setSize(container.clientWidth, container.clientHeight);
+//			container.appendChild(renderer.domElement);
+			
+			
+			const container = document.body;
+			renderer.setSize(window.outerWidth, window.outerHeight);
+			container.appendChild(renderer.domElement);
 
-					// Lights
-					const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-					scene.add(ambientLight);
-					const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-					directionalLight.position.set(200, 200, 1000);
+//			const camera = new THREE.PerspectiveCamera(100, container.clientWidth / container.clientHeight, 0.1, 1000);
 
-					scene.add(directionalLight);
+			const camera = new THREE.PerspectiveCamera(100, window.outerWidth / window.outerHeight, 0.1, 1000);
 
-					// Set camera rotation for tilting (angle in radians)
-					const tiltAngle = Math.PI / 2.5; // 30 degrees in radians
-							
-					// Camera setup
-					camera.position.set(0, -5, 2); // Initial position behind the car
-					camera.rotation.x = tiltAngle; // Look down at 30 degrees angle
-					model.add(camera); // Attach camera to the car
+			camera.position.set(190, -190, 170); // Position above the scene
 
-					// Initialize car movement variables
-					
-					const carMoveSpeed = 1.0; // Adjust movement speed as needed
-					const carRotateSpeed = 0.05; // Adjust rotation speed as needed
-					const acceleration = 0.005; // Adjust acceleration rate as needed
-					const friction = 2; // Adjust friction rate as needed
-					const maxSpeed = 0.5; // Adjust maximum speed as needed
+			// Game loop
 
-					let carRotation = Math.PI; // Current rotation angle in radians
-					let carPosition = new THREE.Vector3(); // Current position of the car
-					carPosition.x = 20
-					carPosition.y = -30
-					carPosition.z = -1.5
-					
-					let carSpeed = 0.0;
-					let accelerating = false; 
+			const animate = () => {
 
-					// Define an array to hold all building bounding boxes
-					const buildingBoundingBoxes = [];
+				requestAnimationFrame(animate);
+				
+				// Render the scene
+				renderer.render(scene, camera);
+			  
+			};
 
-					for (const buildingMesh of buildingMeshes) {
-						buildingBoundingBoxes.push(new THREE.Box3().setFromObject(buildingMesh));
-					}
+			// Start the game loop
+			animate();
 
-					const carGeometry = new THREE.Box3().setFromObject(model).getSize(new THREE.Vector3());
-					const carRadius = carGeometry.length();
-
-					// Create the carBoundingSphere
-					const carBoundingSphere = new THREE.Sphere(carPosition, carRadius / 2);
-
-					function checkBuildingCollisions() {
-						const bounceBackDistance = 0.2; // Adjust the bounce-back distance as needed
-
-						// Iterate through all building bounding boxes
-						for (const buildingBoundingBox of buildingBoundingBoxes) {
-							// Check if the car's bounding sphere intersects with a building bounding box
-							if (carBoundingSphere.intersectsBox(buildingBoundingBox)) {
-							// Calculate the direction from the car's position to the center of the buildingBoundingBox
-								const intersectionPoint = new THREE.Vector3();
-								buildingBoundingBox.getCenter(intersectionPoint);
-								const direction = intersectionPoint.clone().sub(carBoundingSphere.center).normalize();
-
-								// Prevent car from moving forward
-								carPosition.sub(direction.multiplyScalar(carMoveSpeed));
-
-								// Apply the bounce-back effect in the opposite direction
-								const backwardDirection = direction.clone().multiplyScalar(-bounceBackDistance);
-								carPosition.add(backwardDirection);
-							}
-						}
-
-						// Ensure that the car's Z-coordinate remains within the specified range
-						carPosition.z = 0;
-
-						// Update car position after collision check
-						model.position.copy(carPosition);
-					}
-
-					// Handle user input
-					const keyStates = {
-						ArrowLeft: false,
-						ArrowRight: false,
-						ArrowUp: false,
-						ArrowDown: false,
-					};
-
-					// Prevent arrow keys and space bar from scrolling the page
-					document.addEventListener('keydown', function (e) {
-						if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === ' ') {
-							e.preventDefault();
-						}
-					});
-
-					document.addEventListener('keydown', (event) => {
-						if (keyStates.hasOwnProperty(event.code)) {
-							keyStates[event.code] = true;
-						}
-					});
-
-					document.addEventListener('keyup', (event) => {
-						if (keyStates.hasOwnProperty(event.code)) {
-							keyStates[event.code] = false;
-						}
-					});
-
-					function moveLeft() {
-						carRotation += carRotateSpeed;
-					}
-
-					function moveRight() {
-						carRotation -= carRotateSpeed;
-					}
-					
-					function moveUp() {
-						const newCarPositionY = carPosition.y + carMoveSpeed * Math.cos(carRotation);
-						const newCarPositionX = carPosition.x + carMoveSpeed * Math.sin(-carRotation);
-						carPosition.y = newCarPositionY;
-						carPosition.x = newCarPositionX;
-					}
-					
-					function moveDown() {
-						const newCarPositionY = carPosition.y - carMoveSpeed * Math.cos(carRotation);
-						const newCarPositionX = carPosition.x - carMoveSpeed * Math.sin(-carRotation);
-						carPosition.y = newCarPositionY;
-						carPosition.x = newCarPositionX;
-					}
-
-					let moveLeftInterval;
-					let moveRightInterval;
-					let moveUpInterval;
-					let moveDownInterval;
-
-					document.getElementById("left-button").addEventListener("pointerdown", function() {
-						moveLeftInterval = setInterval(moveLeft, 10);
-						e.preventDefault();
-					});
-
-					document.getElementById("left-button").addEventListener("pointerup", function() {
-						clearInterval(moveLeftInterval);
-						e.preventDefault();
-					});
-
-					document.getElementById("right-button").addEventListener("pointerdown", function() {
-						moveRightInterval = setInterval(moveRight, 10);
-						e.preventDefault();
-					});
-
-					document.getElementById("right-button").addEventListener("pointerup", function() {
-						clearInterval(moveRightInterval);
-						e.preventDefault();
-					});
-
-					document.getElementById("up-button").addEventListener("pointerdown", function() {
-						moveUpInterval = setInterval(moveUp, 10);
-						e.preventDefault();
-					});
-
-					document.getElementById("up-button").addEventListener("pointerup", function() {
-						clearInterval(moveUpInterval);
-						e.preventDefault();
-					});
-
-					document.getElementById("down-button").addEventListener("pointerdown", function() {
-						moveDownInterval = setInterval(moveDown, 10);
-						e.preventDefault();
-					});
-
-					document.getElementById("down-button").addEventListener("pointerup", function() {
-						clearInterval(moveDownInterval);
-						e.preventDefault();
-					});
-
-					document.getElementById("stop-button").addEventListener("pointerdown", function() {
-						stopMoving();
-						e.preventDefault();
-						carRotateSpeed == 0;
-						carMoveSpeed == 0;
-					});
-
-					document.getElementById("stop-button").addEventListener("pointerup", function() {
-						stopMoving();
-						e.preventDefault();
-						carRotateSpeed == 0;
-						carMoveSpeed == 0;
-					});
-
-					function stopMoving() {
-						clearInterval(moveLeftInterval);
-						clearInterval(moveRightInterval);
-						clearInterval(moveUpInterval);
-						clearInterval(moveDownInterval);
-					}
-
-					// Game loop
-
-					const animate = () => {
-
-						requestAnimationFrame(animate);
-
-						// Update car rotation
-						if (keyStates.ArrowLeft) {
-							carRotation += carRotateSpeed;
-						}
-
-						if (keyStates.ArrowRight) {
-							carRotation -= carRotateSpeed;
-						}
-
-						if (keyStates.ArrowUp) {
-							moveUp();
-						}
-
-						if (keyStates.ArrowDown) {
-							moveDown();
-						}
-
-						// Update car rotation and position
-						model.rotation.z = carRotation;
-						model.position.copy(carPosition);
-
-						checkBuildingCollisions();
-						
-						// Render the scene
-						renderer.render(scene, camera);
-					  
-					};
-
-					// Start the game loop
-					animate();
-				}
-			);
 		}
 
 		function jesfstart() {
 			megaMaze(startGame);
-			}
+		}
 
 	</script>
 
