@@ -157,15 +157,19 @@
 			document.getElementById('seedButton').addEventListener('click', function() {
 				this.classList.add('hidden'); // Adds the 'hidden' class
 				document.getElementById('seedInput').classList.add('hidden');
-				e.preventDefault();
 			});
 
 		document.getElementById('Refresher').addEventListener('click', (e) => { e.preventDefault(); location.reload(); });
 
 		function megaMaze(callback) {
 
-			// Function to generate a maze matrix with double-thick walls
-			function generateMaze() {
+
+v
+var script = document.createElement('script');
+
+			script.src = 'https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js'
+
+			script.onload = function generateMaze() {
 				const seed = document.getElementById('seedInput').value;
 				const rng = new Math.seedrandom(seed);
 				const rows = 20;
@@ -235,6 +239,8 @@
 				// Store the generated maze in MazeMatrix
 				MazeMatrix = maze;
 			}
+
+			document.head.appendChild(script);
 
 			// Function to change single 0s between two 1s to 1s in rows
 			function changeSingleZerosRows() {
