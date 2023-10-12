@@ -161,12 +161,13 @@
 
 		document.getElementById('Refresher').addEventListener('click', (e) => { e.preventDefault(); location.reload(); });
 
-		function megaMaze(callback) {
-			
 var script = document.createElement('script');
+script.src = 'https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js'
 
-			script.src = 'https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js'
 
+	    
+		script.onload = function megaMaze(callback) {
+			
 		function generateMaze() {
 				const seed = document.getElementById('seedInput').value;
 				const rng = new Math.seedrandom(seed);
@@ -237,8 +238,6 @@ var script = document.createElement('script');
 				// Store the generated maze in MazeMatrix
 				MazeMatrix = maze;
 			}
-
-			document.head.appendChild(script);
 
 			// Function to change single 0s between two 1s to 1s in rows
 			function changeSingleZerosRows() {
@@ -493,6 +492,8 @@ var script = document.createElement('script');
 				callback();
 			}
 		}
+
+	    document.head.appendChild(script);
 
 		// Function to toggle fullscreen and re-render the scene
 		function toggleFullscreen() {
