@@ -207,6 +207,8 @@
 
 	    document.addEventListener('touchmove', function(event) {event.preventDefault();}, { passive: false });
 
+	    document.addEventListener('pointermove', function(event) { if (event.pointerType == 'touch') { event.preventDefault(); } });
+
 
     const images = Array.from({ length: 10 }, (_, i) => `./assets/placestogo/${i + 10}.jpg`);
     let currentIndex = 0;
