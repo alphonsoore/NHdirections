@@ -205,7 +205,7 @@
 
 		document.getElementById('Refresher').addEventListener('click', (e) => { e.preventDefault(); location.reload(); });
 
-
+	    document.addEventListener('touchmove', function(event) {event.preventDefault();}, { passive: false });
 
 
     const images = Array.from({ length: 10 }, (_, i) => `./assets/placestogo/${i + 10}.jpg`);
