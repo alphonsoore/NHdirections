@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no">
-    <title>Turn left! Turn right! Go straight!</title>
+    <title>Directions 3D Drive</title>
     <style>
 		
 			body {
@@ -102,24 +102,6 @@
 				cursor: pointer;
 			}
 
-			.seedinputoverlay {
-				width: 25%;
-				max-width: 300px; /* Limit the maximum width of the overlay */
-				background-color: #fff;
-				border: 1px solid #ccc;
-				box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-				padding: 20px;
-				text-align: center;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				align-items: center;
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				margin: -100px 0 0 -250px;
-			}
-
 			.arrow {
 				font-size: 6px;
 			}
@@ -152,26 +134,26 @@
 
 <body>
 
-		<div id="purefilth" class="seedinputoverlay">
-				<table>
-					<tr>
-						<td><input type="text" id="seedInput" style="width: 150px; height: 50px; font-size: 200%;"></td>
-					</tr>
-					<tr>
-						<td align="center">
-							<button onclick="jesfstart()" id="seedButton" style="width: 150px; height: 100px; font-size: 100%;">
-								まったく同じかな
-							</button>
-						</td>
-					</tr>
-				</table>
-		</div>
-
 		<div id="overlay-controls">
 
 			<button id="fullscreen-button" onclick="toggleFullscreen()">
 				<img src="./assets/fullscreen.png" class="button-image" alt="Right Button">
 			</button>
+
+			<div id="center-buttons" class="control-group">
+				<table>
+					<tr>
+						<td><input type="text" id="seedInput"></td>
+					</tr>
+					<tr>
+						<td align="center">
+							<button onclick="jesfstart()" id="seedButton">
+								Start
+							</button>
+						</td>
+					</tr>
+				</table>
+			</div>
 
 			<div onclick="location.reload();" id="Refresher" class="control-button">
 				<img src="./assets/refresh.png" class="button-image" alt="Refresh">
@@ -191,7 +173,7 @@
 
 		document.getElementById('seedButton').addEventListener('click', function() {
 			this.classList.add('hidden'); // Adds the 'hidden' class
-				document.getElementById('purefilth').classList.add('hidden');
+			document.getElementById('seedInput').classList.add('hidden');
 		}
 		);
 
@@ -202,8 +184,7 @@
 
 			// Function to generate a maze matrix with double-thick walls
 			function generateMaze() {
-				const seedInput = document.getElementById('seedInput');
-				const seed = seedInput.value.toUpperCase();
+				const seed = document.getElementById('seedInput').value;
 				const rng = new Math.seedrandom(seed);
 				const rows = 20;
 				const cols = 20;
@@ -341,18 +322,12 @@
 				}
 			}
 
-			// Makes start value 99
-			function changeMatrixValue() {
-				MazeMatrix[1][1] = 99;
-			}
-
 			// Function
 			function placeSingleNumbersUsingSeed() {
 				const rows = MazeMatrix.length;
 				const cols = MazeMatrix[0].length;
-				const seedInput = document.getElementById('seedInput');
-				const seed = seedInput.value.toUpperCase();
-				const rng = new Math.seedrandom(seed);
+				const seedInput = document.getElementById('seedInput').value;
+				const rng = new Math.seedrandom(seedInput);
 
 				const numbersToPlace = Array.from({ length: 10 }, (_, i) => i + 10); // Numbers 10 to 19
 				
@@ -407,9 +382,8 @@
 			function addExtraPassages() {
 				const rows = MazeMatrix.length;
 				const cols = MazeMatrix[0].length;
-				const seedInput = document.getElementById('seedInput');
-				const seed = seedInput.value.toUpperCase();
-				const rng = new Math.seedrandom(seed);
+				const seedInput = document.getElementById('seedInput').value;
+				const rng = new Math.seedrandom(seedInput);
 
 				// Function to check if a cell is a valid passage (equal to 1)
 					function isValidPassage(row, col) {
@@ -477,9 +451,9 @@
 				addExtraPassages(); // Additional passages detected
 				
 				generateRandomValues(); // Generate random values for 0s
-				changeMatrixValue();
 				placeSingleNumbersUsingSeed();
 
+				console.log(MazeMatrix);
 			}
 
 			// File saving function (debug)
@@ -543,7 +517,7 @@
 			const scene = new THREE.Scene();
 			const renderer = new THREE.WebGLRenderer();
 			renderer.shadowMap.enabled = true; 
-			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.setSize(window.outerWidth, window.outerHeight);
 			document.body.appendChild(renderer.domElement);
 
 			scene.background = new THREE.Color(0x87CEEB); // Use the color code for sky blue
@@ -636,7 +610,6 @@
 			const planeSize = 20; // Size of each plane representing roads
 			const buildingHeights = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0];
 			const roadColor = 0x888888; // Gray color
-			const startroadColor = 0x0000FF;
 			const buildingColors = [0x222222, 0x333333, 0x444444, 0x555555, 0x666666, 0x777777, 0x888888, 0x999999]; // Colors for buildings
 
 			function getRandomBldg(min, max) {
@@ -662,23 +635,6 @@
 					plane.position.z = -2.8
 						
 					scene.add(plane);
-					
-					} else if (binaryMatrix[i][j] == 99) {
-
-						const startzGeometry = new THREE.PlaneGeometry(planeSize, planeSize);
-						const startzMaterial = new THREE.MeshPhongMaterial({
-							color: startroadColor,
-							shininess: 0,
-						});
-						startzMaterial.receiveShadow = true;
-						const startingplane = new THREE.Mesh(startzGeometry, startzMaterial);
-						
-						// Position the plane in 3D space based on matrix coordinates
-						startingplane.position.x = j * planeSize;
-						startingplane.position.y = -i * planeSize; // Invert "i" to match matrix coordinates
-						startingplane.position.z = -2.8
-							
-						scene.add(startingplane);
 						
 					} else if (binaryMatrix[i][j] >= 2 && binaryMatrix[i][j] <= 9) {
 						// Create buildings (rectangular prisms)
@@ -802,7 +758,7 @@
 			
 			
 			const container = document.body;
-			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.setSize(window.outerWidth, window.outerHeight);
 			container.appendChild(renderer.domElement);
 
 //			const camera = new THREE.PerspectiveCamera(100, container.clientWidth / container.clientHeight, 0.1, 1000);
