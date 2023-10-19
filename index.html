@@ -7,42 +7,39 @@
 				padding: 0;
 				display: flex;
 				justify-content: space-between;
+				text-align: center;
+				font-family: sans-serif;
+				background-color: #D2B48C;
 			}
 
-			.square {
-				flex: 1;
-				margin: 10px;
-				padding: 20px;
-				border: 1px solid #ccc;
-				text-align: center;
+			img {
 				width: 400px;
 				height: 400px;
 			}
 
-			.square a {
-				text-decoration: none;
-			}
-
-			.square img {
-				max-width: 300px;
-				max-height: 300px;
-				object-fit: cover;
+			table {
+				margin: 0 auto;
+				transform: translateY(5%);
+				border-spacing: 40px;
 			}
 
 		</style>
 </head>
 <body>
-<div class="square">
-<a href="map.html">
-<img src="./assets/map.jpg" alt="Map Image">
-Giving directions
-</a>
-</div>
-<div class="square">
-<a href="driving.html">
-<img src="./assets/driving.jpg" alt="Driving Image">
-Driving
-</a>
-</div>
+
+
+<table>
+  <tr style="height: 80%;">
+    <td style="width: 50%;"><a href="./map.html"><img src="./assets/map.png" alt="Map Image"></td>
+    <td style="width: 50%;"><a href="./driving.html"><img src="./assets/driving.png" alt="Driving Image"></td>
+  </tr>
+  <tr style="height: 20%; background-color: #C19A6B">
+    <td style="width: 50%; font-size: 30px;"><a href="./map.html">Giving Directions</a></td>
+    <td style="width: 50%; font-size: 30px"><a href="./driving.html">Driving</a></td>
+  </tr>
+</table>
+
+
+
 </body>
 </html>
